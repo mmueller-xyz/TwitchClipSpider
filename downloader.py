@@ -1,6 +1,7 @@
 #!python3
 import argparse
 import os
+from concurrent.futures.thread import ThreadPoolExecutor
 
 import requests
 import threading
@@ -31,10 +32,9 @@ def check_vod(vod_id, start_offset, end_offset):
         os.mkdir("./clips")
     except OSError:
         pass
-
-    for i in range(start_offset,end_offset):
-        threading.Thread(target=dl_clip, args=(get_url(vod_id, i), get_fname(vod_id, i))).start()
-        sleep(.05)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        for i in range(start_offset,end_offset):
+            executor.submit(dl_clip, get_url(vod_id, i), get_fname(vod_id, i))
 
 
 
