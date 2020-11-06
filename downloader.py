@@ -32,7 +32,7 @@ def check_vod(vod_id, start_offset, end_offset):
         os.mkdir("./clips")
     except OSError:
         pass
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=20) as executor:
         for i in range(start_offset,end_offset):
             executor.submit(dl_clip, get_url(vod_id, i), get_fname(vod_id, i))
 
